@@ -1,0 +1,17 @@
+{
+  "telegram": {
+    "botkey": ""
+  },
+  "gemini": {
+    "apikey": ""
+  },
+  "bing": {
+    "cookie": ""
+  },
+  "okx": {
+    "apikey": "",
+    "secret": "",
+    "passphrase": "",
+    "market": "prod"
+  }
+}

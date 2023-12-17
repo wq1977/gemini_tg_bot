@@ -1,0 +1,2 @@
+rsync -ave ssh --exclude=node_modules --exclude=.git ./ ubuntu@ssbh.wqiang.fun:geminibot/
+ssh ubuntu@ssbh.wqiang.fun 'cd geminibot && yarn && pm2 reload gemini'
