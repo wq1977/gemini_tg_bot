@@ -5,4 +5,5 @@ module.exports = [
   require("./vision"),
   require("./news"),
   require("./weather"),
+  require("./rate"),
 ];

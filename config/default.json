@@ -19,5 +19,8 @@
   },
   "qweather": {
     "apikey": ""
+  },
+  "angerate": {
+    "apikey": ""
   }
 }
