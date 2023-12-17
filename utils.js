@@ -18,6 +18,35 @@ function tomdv2(text) {
   return loopNode(dom.window.document.body);
 }
 
+function parseParams(text) {
+  const result = [];
+  while (text) {
+    let waitingChar = " ";
+    let originLen = text.length;
+    let pStart = 0;
+    for (let i = 0; i < text.length; i++) {
+      if (text[i] == waitingChar) {
+        result.push(text.substring(pStart, i));
+        text = text.substr(i + 1);
+        break;
+      } else {
+        if (text[i] == '"' || text[i] == "'") {
+          pStart = i + 1;
+          if (!text.substr(0, i).trim()) {
+            waitingChar = text[i];
+          }
+        }
+      }
+    }
+    if (text.length == originLen) {
+      result.push(text);
+      break;
+    }
+  }
+  return result.map((a) => a.trim()).filter((a) => a);
+}
+
 module.exports = {
   tomdv2,
+  parseParams,
 };

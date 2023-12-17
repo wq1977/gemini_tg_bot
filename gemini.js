@@ -187,6 +187,18 @@ class Gemini {
     });
     await this.talk2gemini(bot, msg);
   }
+  async go(bot, message) {
+    const typing = setInterval(() => {
+      bot.sendChatAction(message.chat.id, "typing");
+    }, 3000);
+    try {
+      await this.append(bot, message);
+    } catch (error) {
+      log.error(error, "gemini执行遇到错误");
+      bot.sendMessage(message.chat.id, `遇到错误:${error}`);
+    }
+    clearInterval(typing);
+  }
 }
 
 module.exports = new Gemini();
