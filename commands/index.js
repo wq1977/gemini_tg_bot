@@ -5,7 +5,8 @@ class CommandRun {
       require("./reset"),
       require("./dalle3"),
       require("./start"),
-    ];
+      require("./news"),
+    ].filter((c) => !c.disabled);
   }
   async init(bot) {
     bot.setMyCommands(
@@ -43,7 +44,7 @@ class CommandRun {
         return;
       }
     }
-    bot.sendMessage(message.chat.id, `未知命令:${cmd}`);
+    bot.sendMessage(message.chat.id, `未知命令:${command}`);
   }
   //任何命令都会先走到这里
   async test(bot, message) {

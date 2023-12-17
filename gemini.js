@@ -5,12 +5,7 @@ class Gemini {
     this.sessions = {};
   }
   get functions() {
-    return [
-      require("./functions/now"),
-      require("./functions/dalle3"),
-      require("./functions/price"),
-      require("./functions/vision"),
-    ]
+    return require("./functions")
       .filter((f) => !f.disabled)
       .reduce((r, f) => {
         r[f.name] = f;

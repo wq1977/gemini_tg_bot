@@ -13,5 +13,8 @@
     "secret": "",
     "passphrase": "",
     "market": "prod"
+  },
+  "news": {
+    "apikey": ""
   }
 }
