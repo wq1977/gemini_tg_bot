@@ -48,8 +48,10 @@ class Gemini {
         role: m.role,
         parts: m.parts,
       })),
-
       tools: this.tools,
+      generationConfig: {
+        maxOutputTokens: 1500,
+      },
     };
     const gemini_key = require("config").get("gemini.apikey");
     if (!gemini_key) {
