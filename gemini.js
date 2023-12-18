@@ -125,7 +125,10 @@ class Gemini {
         }
         const text = json.candidates[0].content.parts[0].text;
         if (text) {
-          if (text.trim().toLowerCase() != "null") {
+          if (
+            text.trim().toLowerCase() != "null" &&
+            text.trim().toLowerCase() != "**null**"
+          ) {
             this.bot.sendMessage(message.chat.id, tomdv2(text), {
               parse_mode: "MarkdownV2",
             });

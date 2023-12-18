@@ -6,7 +6,7 @@ module.exports = {
   disabled: !require("config").get("news.apikey"),
   async run(bot, msg, args) {
     const [prompt] = args;
-    msg.text = `请先把 \`${prompt}\` 翻译成英语，然后搜索一下和翻译结果相关的新闻，请尽可能多的展示内容,将结果翻译成中文并保留消息源和发布时间和相关网址`;
+    msg.text = `请先把 \`${prompt}\` 翻译成英语，然后搜索一下和翻译结果相关的新闻，请移除内容相似的新闻，尽可能多的展示内容,将结果翻译成中文并保留消息源和发布时间和相关网址`;
     await gemini.go(bot, msg);
   },
 };
