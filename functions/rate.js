@@ -3,8 +3,7 @@ class OpenAIFunction {
   constructor() {
     this.disabled = !API_KEY;
     this.name = "rate";
-    this.description =
-      "获取国际货币兑换人民币的实时汇率，返回的值代表多少元国际货币可以兑换1元人民币";
+    this.description = "获取某种货币兑换人民币的实时汇率";
     this.params = [
       {
         name: "code",
