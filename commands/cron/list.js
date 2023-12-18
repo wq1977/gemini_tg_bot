@@ -9,7 +9,9 @@ module.exports = {
       msg.chat.id,
       tomdv2(
         `以下是目前的定时任务:\n${tasks
-          .map((t) => `**${t.id}**(${t.interval}): ${t.prompt}`)
+          .map(
+            (t) => `**${t.value.id}**(${t.value.interval}): ${t.value.prompt}`
+          )
           .join("\n")}`
       ),
       {

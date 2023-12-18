@@ -20,6 +20,9 @@ class Levels {
   async set(key, value) {
     return await this.db.put(key, value);
   }
+  async del(key) {
+    return await this.db.del(key);
+  }
   async lookup(prefix) {
     const iterator = this.db.iterator();
     const result = [];

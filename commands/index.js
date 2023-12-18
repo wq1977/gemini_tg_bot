@@ -8,6 +8,8 @@ class CommandRun {
       require("./news"),
       require("./cron/add"),
       require("./cron/list"),
+      require("./cron/modify_prompt"),
+      require("./cron/delete"),
     ].filter((c) => !c.disabled);
   }
   async init(bot) {
