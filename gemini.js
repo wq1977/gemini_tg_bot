@@ -125,9 +125,11 @@ class Gemini {
         }
         const text = json.candidates[0].content.parts[0].text;
         if (text) {
-          this.bot.sendMessage(message.chat.id, tomdv2(text), {
-            parse_mode: "MarkdownV2",
-          });
+          if (text != "null") {
+            this.bot.sendMessage(message.chat.id, tomdv2(text), {
+              parse_mode: "MarkdownV2",
+            });
+          }
           if (this.sessions[sessionid].photos.length) {
             this.bot.sendMediaGroup(
               message.chat.id,
