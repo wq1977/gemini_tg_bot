@@ -33,8 +33,8 @@ for (let func of require("./functions")) {
   func.init && func.init(bot);
 }
 
-bot.on("message", async function (message) {
-  log.info({ message }, "got message callback");
+async function onMsg(message) {
+  log.info({ message }, "new message or modified message");
   if (message.photo && message.photo.length) {
     message.text = `这里有一幅图片，它的编号是"${
       message.photo[message.photo.length - 1].file_id
@@ -49,4 +49,6 @@ bot.on("message", async function (message) {
       await gemini.go(bot, message);
     }
   }
-});
+}
+bot.on("edited_message", onMsg);
+bot.on("message", onMsg);
