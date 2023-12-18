@@ -6,9 +6,14 @@ class CommandRun {
       require("./dalle3"),
       require("./start"),
       require("./news"),
+      require("./cron/add"),
+      require("./cron/list"),
     ].filter((c) => !c.disabled);
   }
   async init(bot) {
+    for (let cmd of this.commands) {
+      cmd.init && cmd.init(bot);
+    }
     bot.setMyCommands(
       this.commands
         .filter((c) => !c.hidden)
@@ -54,8 +59,13 @@ class CommandRun {
       await this.runningCmd.run(bot, message, this.runningCmdArgs);
       this.runningCmd = null;
       this.runningCmdArgs = null;
-      return true;
+    } else {
+      bot.sendMessage(
+        message.chat.id,
+        this.runningCmd.args[this.runningCmdArgs.length].desc
+      );
     }
+    return true;
   }
 }
 

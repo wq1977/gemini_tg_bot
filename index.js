@@ -29,6 +29,9 @@ setInterval(() => {
 
 const runCommand = require("./commands");
 runCommand.init(bot);
+for (let func of require("./functions")) {
+  func.init && func.init(bot);
+}
 
 bot.on("message", async function (message) {
   log.info({ message }, "got message callback");

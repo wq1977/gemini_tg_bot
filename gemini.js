@@ -42,9 +42,9 @@ class Gemini {
     ];
   }
   async talk2gemini(bot, message) {
-    const chatid = message.chat.id;
+    const sessionid = message.chat.session || message.chat.id;
     const body = {
-      contents: this.sessions[chatid].queue.map((m) => ({
+      contents: this.sessions[sessionid].queue.map((m) => ({
         role: m.role,
         parts: m.parts,
       })),
@@ -73,7 +73,7 @@ class Gemini {
       const functionResponses = [];
       if (json.candidates && json.candidates.length) {
         const parts = json.candidates[0].content.parts;
-        this.sessions[chatid].queue.push({
+        this.sessions[sessionid].queue.push({
           role: "model",
           parts,
           timestamp: new Date(),
@@ -95,7 +95,7 @@ class Gemini {
             if (part.functionCall.name == "text2image") {
               if (typeof content == "object" && content.length) {
                 for (let elem of content) {
-                  this.sessions[chatid].photos.push({
+                  this.sessions[sessionid].photos.push({
                     type: "photo",
                     media: elem,
                     caption: part.functionCall.args.prompt,
@@ -114,7 +114,7 @@ class Gemini {
           }
         }
         if (functionResponses.length) {
-          this.sessions[chatid].queue.push({
+          this.sessions[sessionid].queue.push({
             role: "function",
             parts: functionResponses.map((functionResponse) => ({
               functionResponse,
@@ -125,57 +125,63 @@ class Gemini {
         }
         const text = json.candidates[0].content.parts[0].text;
         if (text) {
-          this.bot.sendMessage(chatid, tomdv2(text), {
+          this.bot.sendMessage(message.chat.id, tomdv2(text), {
             parse_mode: "MarkdownV2",
           });
-          if (this.sessions[chatid].photos.length) {
-            this.bot.sendMediaGroup(chatid, this.sessions[chatid].photos);
-            this.sessions[chatid].photos = [];
+          if (this.sessions[sessionid].photos.length) {
+            this.bot.sendMediaGroup(
+              message.chat.id,
+              this.sessions[sessionid].photos
+            );
+            this.sessions[sessionid].photos = [];
           }
         } else {
-          this.bot.sendMessage(chatid, "未能识别的gemini响应");
+          this.bot.sendMessage(
+            message.chat.id,
+            `未能识别的gemini响应:${sessionid}`
+          );
         }
       } else {
-        this.sessions[chatid].queue.splice(
-          this.sessions[chatid].queue.length - 1
+        this.sessions[sessionid].queue.splice(
+          this.sessions[sessionid].queue.length - 1
         ); //最后一个问题遇到错误，可能被拒绝回答，如果保留就会遇到连续两句user的错误
         if (json.error) {
           this.bot.sendMessage(
-            chatid,
-            `gemini遇到可以识别的错误：${json.error.message}`
+            message.chat.id,
+            `gemini遇到可以识别的错误(${sessionid}):${json.error.message}`
           );
           return;
         }
         if (json.promptFeedback.blockReason) {
           this.bot.sendMessage(
-            chatid,
-            `gemini不愿意回答这个问题，原因是: ${json.promptFeedback.blockReason}`
+            message.chat.id,
+            `gemini不愿意回答这个问题(${sessionid})，原因是: ${json.promptFeedback.blockReason}`
           );
           return;
         }
       }
     } else {
-      this.bot.sendMessage(chatid, "gemini沉默了");
+      this.bot.sendMessage(message.chat.id, `${sessionid}:gemini沉默了`);
     }
   }
-  clear(chatid) {
-    log.info({ chatid }, "clear chatid for manual or timer reason");
-    if (this.sessions[chatid]) {
-      delete this.sessions[chatid];
+  clear(sessionid) {
+    log.info({ sessionid }, "clear session for manual or timer reason");
+    if (this.sessions[sessionid]) {
+      delete this.sessions[sessionid];
     }
   }
   async append(bot, msg) {
-    const chatid = msg.chat.id;
-    if (!this.sessions[chatid]) {
-      this.sessions[chatid] = { queue: [], timer: null, photos: [] };
+    const sessionid = msg.chat.session || msg.chat.id;
+    if (!this.sessions[sessionid]) {
+      this.sessions[sessionid] = { queue: [], timer: null, photos: [] };
     }
-    if (this.sessions[chatid].timer) {
-      clearTimeout(this.sessions[chatid].timer);
+    if (this.sessions[sessionid].timer) {
+      clearTimeout(this.sessions[sessionid].timer);
     }
-    this.sessions[chatid].timer = setTimeout(() => {
-      this.clear(chatid);
+    this.sessions[sessionid].timer = setTimeout(() => {
+      this.clear(sessionid);
     }, 3 * 60 * 1000);
-    this.sessions[chatid].queue.push({
+    this.sessions[sessionid].queue.push({
       role: "user",
       parts: {
         text: msg.text,
