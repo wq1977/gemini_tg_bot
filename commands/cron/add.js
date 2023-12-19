@@ -25,7 +25,10 @@ module.exports = {
             "need run task"
           );
           gemini.append(bot, {
-            chat: { id: task.value.chatid, session: `cron-${task.id}-${tick}` },
+            chat: {
+              id: task.value.chatid,
+              session: `cron-${task.value.id}-${tick}`,
+            },
             text: task.value.prompt,
           });
         } else {
