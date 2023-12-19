@@ -44,7 +44,7 @@ module.exports = {
       id,
       interval: parseInt(interval),
       prompt,
-      shift,
+      shift: parseInt(shift),
       chatid: msg.chat.id,
     });
     bot.sendMessage(msg.chat.id, "定时任务已经成功添加");
