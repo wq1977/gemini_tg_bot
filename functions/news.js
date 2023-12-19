@@ -19,7 +19,7 @@ class OpenAIFunction {
     const rsp = await fetch(
       `https://newsapi.org/v2/everything?q=${encodeURIComponent(
         prompt
-      )}&sortBy=publishedAt&apiKey=${apikey}&pageSize=20`
+      )}&sortBy=publishedAt&searchIn=title&apiKey=${apikey}&pageSize=20`
     );
     const json = await rsp.json();
     if (json.status == "error") return `遇到错误：${json.message}`;

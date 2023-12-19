@@ -6,6 +6,7 @@ module.exports = {
   description: "增加一个定时任务",
   args: [
     { desc: "定时任务的执行频率，单位是分钟" },
+    { desc: "定时任务的执行偏移，单位是分钟，不能大于执行频率" },
     { desc: "定时任务需要执行的命令" },
   ],
   async init(bot) {
@@ -18,7 +19,7 @@ module.exports = {
       this.lastTick = tick;
       const tasks = await levels.lookup("/cron/task/");
       for (let task of tasks) {
-        if (tick % task.value.interval == 0) {
+        if (tick % task.value.interval == (task.value.shift || 0)) {
           log.info(
             { tick, interval: task.value.interval, id: task.value.id },
             "need run task"
@@ -37,12 +38,13 @@ module.exports = {
     }, 30000);
   },
   async run(bot, msg, args) {
-    const [interval, prompt] = args;
+    const [interval, shift, prompt] = args;
     const id = require("moment")().add(8, "hours").format("YYYYMMDDHHmmssSSS");
     await levels.set(`/cron/task/${id}`, {
       id,
       interval: parseInt(interval),
       prompt,
+      shift,
       chatid: msg.chat.id,
     });
     bot.sendMessage(msg.chat.id, "定时任务已经成功添加");

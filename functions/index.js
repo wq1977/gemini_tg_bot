@@ -6,5 +6,4 @@ module.exports = [
   require("./news"),
   require("./weather"),
   require("./rate"),
-  require("./cron/add"),
 ];
