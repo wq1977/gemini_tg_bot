@@ -5,7 +5,6 @@ class CommandRun {
       require("./reset"),
       require("./dalle3"),
       require("./start"),
-      require("./news"),
       require("./cron/add"),
       require("./cron/list"),
       require("./cron/modify_prompt"),
