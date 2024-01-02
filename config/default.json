@@ -20,6 +20,10 @@
   "qweather": {
     "apikey": ""
   },
+  "google": {
+    "search_context": "",
+    "search": ""
+  },
   "angerate": {
     "apikey": ""
   },
