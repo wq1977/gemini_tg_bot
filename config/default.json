@@ -1,6 +1,9 @@
 {
   "telegram": {
-    "botkey": ""
+    "botkey": "",
+    "port": 3001,
+    "host": "",
+    "url": ""
   },
   "gemini": {
     "apikey": ""

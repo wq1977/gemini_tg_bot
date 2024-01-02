@@ -1,2 +1,2 @@
-rsync -ave ssh --exclude=node_modules --exclude=.git --exclude=data/ ./ ubuntu@18.209.22.159:geminibot/
-ssh ubuntu@18.209.22.159 'cd geminibot && npm i && pm2 reload gemini'
+rsync -ave ssh --exclude=node_modules --exclude=.git --exclude=data/ ./ ubuntu@129.146.210.72:geminibot/
+ssh ubuntu@129.146.210.72 'cd geminibot && npm i && pm2 reload gemini'
