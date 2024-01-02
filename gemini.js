@@ -90,7 +90,10 @@ class Gemini {
               );
             } catch (error) {
               log.error(error, "执行函数错误");
-              content = `执行错误：${error.toString()}`;
+              content = `执行错误：${error.toString()}，将自动清空当前会话`;
+              setTimeout(() => {
+                this.clear(sessionid);
+              }, 1000);
             }
             if (part.functionCall.name == "text2image") {
               if (typeof content == "object" && content.length) {
@@ -153,15 +156,21 @@ class Gemini {
         if (json.error) {
           this.bot.sendMessage(
             message.chat.id,
-            `gemini遇到可以识别的错误(${sessionid}):${json.error.message}`
+            `gemini遇到可以识别的错误(${sessionid}):${json.error.message}，当前会话将被清空`
           );
+          setTimeout(() => {
+            this.clear(sessionid);
+          }, 1000);
           return;
         }
         if (json.promptFeedback.blockReason) {
           this.bot.sendMessage(
             message.chat.id,
-            `gemini不愿意回答这个问题(${sessionid})，原因是: ${json.promptFeedback.blockReason}`
+            `gemini不愿意回答这个问题(${sessionid})，原因是: ${json.promptFeedback.blockReason},当前会话将被清空。`
           );
+          setTimeout(() => {
+            this.clear(sessionid);
+          }, 1000);
           return;
         }
       }
@@ -203,7 +212,10 @@ class Gemini {
       await this.append(bot, message);
     } catch (error) {
       log.error(error, "gemini执行遇到错误");
-      bot.sendMessage(message.chat.id, `遇到错误:${error}`);
+      bot.sendMessage(message.chat.id, `遇到错误:${error},当前会话将被清空`);
+      setTimeout(() => {
+        this.clear(message.chat.id);
+      }, 1000);
     }
     clearInterval(typing);
   }

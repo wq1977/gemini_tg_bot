@@ -24,9 +24,11 @@ class OpenAIFunction {
   }
   async run(bot, msg, args) {
     const { question, days } = args;
-    let url = `https://customsearch.googleapis.com/customsearch/v1?c2coff=1&cx=${config.get(
+    let url = `https://customsearch.googleapis.com/customsearch/v1?c2coff=1&cx=${require("config").get(
       "google.search_context"
-    )}&q=${encodeURIComponent(question)}&key=${config.get("google.search")}`;
+    )}&q=${encodeURIComponent(question)}&key=${require("config").get(
+      "google.search"
+    )}`;
     if (days) {
       url += `&dateRestrict=d${days}`;
     }
