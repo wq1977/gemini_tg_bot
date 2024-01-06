@@ -90,10 +90,7 @@ class Gemini {
               );
             } catch (error) {
               log.error(error, "执行函数错误");
-              content = `执行错误：${error.toString()}，将自动清空当前会话`;
-              setTimeout(() => {
-                this.clear(sessionid);
-              }, 1000);
+              content = `执行错误：${error.toString()}`;
             }
             if (part.functionCall.name == "text2image") {
               if (typeof content == "object" && content.length) {
